@@ -1,3 +1,9 @@
+This aims to be a minimal reminder list application using a Firebase backend.
+
+
+
+
+BOILERPLATE
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
