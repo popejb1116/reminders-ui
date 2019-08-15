@@ -5,19 +5,24 @@ const AddItem = () => {
 
    const [item, setItem] = useState()
    
-   const handleSubmit = e => {
+   const handleSubmit = async(e) => {
       e.preventDefault()
       console.log(item)
       const fbItem = {
          name: item
       }
-      firestore.collection('items').add(fbItem)
-      .then(() => {
-         console.log('Firebase Add')
-      })
-      .catch( error => {
+      // firestore.collection('items').add(fbItem)
+      // .then(() => {
+      //    console.log('Firebase Add')
+      // })
+      // .catch( error => {
+      //    console.log('Firebase Error')
+      // })
+      try {
+         await firestore.collection('items').add(fbItem)
+      } catch (error) {
          console.log('Firebase Error')
-      })
+      }
    }
 
    const handleChange = e => {
