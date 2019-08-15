@@ -1,21 +1,50 @@
-//LISTEN
+// LISTEN TO FIRESTORE
 
 import React, {useState, useEffect} from 'react'
 import {firestore} from '../config/firebase'
 
 const ViewItems = () => {
 
-   const [itemCount, setItemCount] = useState()
+   const [isLoading, setIsLoading] = useState(true)
+   const [firestoreData, setFirestoreData] = useState()
 
-   const firestoreDataListener = firestore.collection('items').onSnapshot(snapshot => {
-      //console.log(snapshot)
-      setItemCount(snapshot.size)
-   })
+   // DETACH LISTENER BY CALLING firestoreDataListener()
+   let firestoreDataListener
 
-   return (
-      <div>
-         Item Count: {itemCount}
-      </div>
+   useEffect(() => {
+      const connectFirestoreListener = async() => {
+         firestoreDataListener = await firestore.collection('items').onSnapshot(snapshot => {
+            const docs = snapshot.docs
+            const docData = docs.map(doc => {
+               return {id: doc.id, ...doc.data()}
+            })
+            setFirestoreData(docData)
+            setIsLoading(false)
+         })
+      } 
+      connectFirestoreListener() 
+   }, [])
+
+   const Loading = () => {
+      return <div>Loading</div>
+   }
+
+   const DataList = () => {
+      return (
+         <ul>
+            {firestoreData.map(datum => <DataItem datum={datum} key={datum.id}/>)}
+         </ul>
+      )
+   }
+
+   const DataItem = ({datum}) => {
+      return <li>Item: {datum.name}</li>
+   }
+
+   return isLoading ? (
+      <Loading/>
+   ) : (
+      <DataList/>
    )
 }
 
@@ -28,25 +57,7 @@ export default ViewItems
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// GET
+// GET FROM FIRESTORE
 
 // import React, {useState, useEffect} from 'react'
 // import {firestore} from '../config/firebase'
