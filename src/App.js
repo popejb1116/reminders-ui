@@ -1,9 +1,10 @@
-import React from 'react';
+import React from 'react'
+import AddItem from './components/AddItem'
 
 function App() {
    return (
-      <div>Test</div>
+      <AddItem/>
    )
 }
 
-export default App;
+export default App
