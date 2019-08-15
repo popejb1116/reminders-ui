@@ -9,10 +9,14 @@ const ViewItems = () => {
    useEffect(() => {
       const getData = async() => {
          try {
-            const data = await firestore.collection('items').get()
-            setFsData(data)
+            const res = await firestore.collection('items').get()
+            const docs = res.docs
+            const dataArray = docs.map(doc => {
+               return doc.data()
+            })
+            setFsData(dataArray)
             setIsLoading(false)
-            console.log(data)
+            
          } catch (error) {
             console.log("Firestore Error")
          }  
@@ -24,10 +28,16 @@ const ViewItems = () => {
       return <div>Loading</div>
    }
 
+   const DocItem = ({datum}) => {
+      return <li>{datum.name}</li>
+   }
+
    return isLoading ? (
       <Loading/>
    ) : (
-      <div>OK</div>
+      <ul>
+         {fsData.map( datum => <DocItem datum={datum} key={datum.name} />)}
+      </ul>
    )
 }
 
