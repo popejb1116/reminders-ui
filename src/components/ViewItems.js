@@ -4,17 +4,18 @@ import {firestore} from '../config/firebase'
 const ViewItems = () => {
 
    const [isLoading, setIsLoading] = useState(true)
-   const [fsData, setFsData] = useState()
+   const [firestoreData, setFirestoreData] = useState()
 
+   // COMPONENT DID MOUNT AS HOOK
    useEffect(() => {
       const getData = async() => {
          try {
             const res = await firestore.collection('items').get()
             const docs = res.docs
-            const dataArray = docs.map(doc => {
+            const docData = docs.map(doc => {
                return doc.data()
             })
-            setFsData(dataArray)
+            setFirestoreData(docData)
             setIsLoading(false)
             
          } catch (error) {
@@ -28,16 +29,24 @@ const ViewItems = () => {
       return <div>Loading</div>
    }
 
-   const DocItem = ({datum}) => {
+   const DataList = () => {
+      return (
+         <ul>
+            {firestoreData.map( datum => {
+               return <DataItem datum={datum} key={datum.name}/>
+            })}
+         </ul>
+      )
+   }
+
+   const DataItem = ({datum}) => {
       return <li>{datum.name}</li>
    }
 
    return isLoading ? (
       <Loading/>
    ) : (
-      <ul>
-         {fsData.map( datum => <DocItem datum={datum} key={datum.name} />)}
-      </ul>
+      <DataList/>
    )
 }
 
