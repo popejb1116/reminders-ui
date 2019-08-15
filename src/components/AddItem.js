@@ -11,13 +11,6 @@ const AddItem = () => {
       const fbItem = {
          name: item
       }
-      // firestore.collection('items').add(fbItem)
-      // .then(() => {
-      //    console.log('Firebase Add')
-      // })
-      // .catch( error => {
-      //    console.log('Firebase Error')
-      // })
       try {
          await firestore.collection('items').add(fbItem)
       } catch (error) {
@@ -25,24 +18,15 @@ const AddItem = () => {
       }
    }
 
-   const handleChange = e => {
-      console.log('handle change')
-      setItem(e.target.value)
-   }
-
    return (
       <form onSubmit={handleSubmit}>
-
          <input 
             type="text" 
             placeholder="Add Something"
-            onChange={handleChange}
+            onChange={e => setItem(e.target.value)}
          />
-
          <button>Add!</button>
-
       </form>
-      
    )
 }
 

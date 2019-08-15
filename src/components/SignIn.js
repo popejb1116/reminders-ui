@@ -8,9 +8,6 @@ const SignIn = () => {
 
    const handleSubmit = e => {
       e.preventDefault()
-      console.log("Submit")
-      console.log(email)
-      console.log(password)
 
       auth.signInWithEmailAndPassword(email, password)
       .then(() => {
