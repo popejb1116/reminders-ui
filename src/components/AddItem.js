@@ -7,7 +7,6 @@ const AddItem = () => {
    
    const handleSubmit = async(e) => {
       e.preventDefault()
-      console.log(item)
       const fbItem = {
          name: item
       }
