@@ -1,9 +1,14 @@
-import React from 'react'
+import React, {Fragment} from 'react'
+import SignIn from './components/SignIn'
 import AddItem from './components/AddItem'
 
 function App() {
    return (
-      <AddItem/>
+      <Fragment>
+         <SignIn/>
+         <br/>
+         <AddItem/>
+      </Fragment>
    )
 }
 
