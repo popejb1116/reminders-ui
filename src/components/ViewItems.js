@@ -12,9 +12,7 @@ const ViewItems = () => {
          try {
             const res = await firestore.collection('items').get()
             const docs = res.docs
-            const docData = docs.map(doc => {
-               return doc.data()
-            })
+            const docData = docs.map(doc => doc.data())
             setFirestoreData(docData)
             setIsLoading(false)
             
@@ -32,9 +30,9 @@ const ViewItems = () => {
    const DataList = () => {
       return (
          <ul>
-            {firestoreData.map( datum => {
-               return <DataItem datum={datum} key={datum.name}/>
-            })}
+            {firestoreData.map(datum => 
+               <DataItem datum={datum} key={datum.name}/>
+            )}
          </ul>
       )
    }
