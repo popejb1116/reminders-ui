@@ -1,9 +1,9 @@
 // LISTEN TO FIRESTORE
 
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, Fragment} from 'react'
 import {firestore} from '../config/firebase'
 
-let firestoreDataListener
+let detachFirestoreListener
 
 const ViewItems = () => {
 
@@ -12,7 +12,7 @@ const ViewItems = () => {
 
    useEffect(() => {
       const connectFirestoreListener = async() => {
-         firestoreDataListener = await firestore.collection('items').onSnapshot(snapshot => {
+         detachFirestoreListener = await firestore.collection('items').onSnapshot(snapshot => {
             const docs = snapshot.docs
             const docData = docs.map(doc => {
                // CREATE NEW OBJECT BY ADDING THE FIRESTORE DOC ID TO THE FIRESTORE DOC DATA
@@ -27,7 +27,7 @@ const ViewItems = () => {
       // DETACH LISTENER UPON 'UNMOUNT'
       return () => {
          console.log('Unmount')
-         firestoreDataListener()
+         detachFirestoreListener()
       }
    }, [])
 
@@ -51,7 +51,11 @@ const ViewItems = () => {
    return isLoading ? (
       <Loading/>
    ) : (
-      <DataList/>
+      <Fragment>
+         <DataList/>
+         {/* PROOF OF DETACH FUNCTIONALITY, NO PRODUCTION VALUE */}
+         <button onClick={() => detachFirestoreListener()}>Detach</button>
+      </Fragment>
    )
 }
 
