@@ -3,19 +3,19 @@
 import React, {useState, useEffect} from 'react'
 import {firestore} from '../config/firebase'
 
+let firestoreDataListener
+
 const ViewItems = () => {
 
    const [isLoading, setIsLoading] = useState(true)
    const [firestoreData, setFirestoreData] = useState()
-
-   // DETACH LISTENER BY CALLING firestoreDataListener()
-   let firestoreDataListener
 
    useEffect(() => {
       const connectFirestoreListener = async() => {
          firestoreDataListener = await firestore.collection('items').onSnapshot(snapshot => {
             const docs = snapshot.docs
             const docData = docs.map(doc => {
+               // CREATE NEW OBJECT BY ADDING THE FIRESTORE DOC ID TO THE FIRESTORE DOC DATA
                return {id: doc.id, ...doc.data()}
             })
             setFirestoreData(docData)
@@ -23,6 +23,12 @@ const ViewItems = () => {
          })
       } 
       connectFirestoreListener() 
+
+      // DETACH LISTENER UPON 'UNMOUNT'
+      return () => {
+         console.log('Unmount')
+         firestoreDataListener()
+      }
    }, [])
 
    const Loading = () => {
@@ -38,7 +44,8 @@ const ViewItems = () => {
    }
 
    const DataItem = ({datum}) => {
-      return <li>Item: {datum.name}</li>
+      let text = `Grab ${datum.quantity} ${datum.name}`
+      return <li>{text}</li>
    }
 
    return isLoading ? (
